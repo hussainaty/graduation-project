@@ -1,7 +1,9 @@
 # EGX Risk Radar: M1 Progress Report
 
 **Graduation project: stock-market AI for the Egyptian Exchange (EGX)**
+
 **Status:** M1 (price-only model) complete · **Date:** 27 November 2026
+
 **GitHub:** https://github.com/hussainaty/graduation-project
 
 ---
@@ -19,10 +21,10 @@ Target: the absolute log return `|log(P[t+h] / P[t])|` for h = 1, 5 and 20.
 - **Base paper:** Brini (2026), *arXiv:2607.05291*. It combines IBM's TTM time-series foundation model with the classic Log-HAR volatility model.
 - **What the professor asked for:** take a recent paper and improve on it, using price data only (no news) as the first step.
 - **What we add:**
-  1. We test the paper on a new market, the **Egyptian EGX30**. It is an emerging market with a ±20% daily price limit and messy public data.
-  2. We compare it against **16 models**, not just the paper's set.
-  3. We add **adaptive conformal ranges** (Gibbs & Candès, 2021). They keep 90% coverage when the market changes, where standard ranges fall below 90%.
-  4. We build an **automatic cleaning step** for the errors in free EGX data.
+    1. We test the paper on a new market, the **Egyptian EGX30**. It is an emerging market with a ±20% daily price limit and messy public data.
+    2. We compare it against **16 models**, not just the paper's set.
+    3. We add **adaptive conformal ranges** (Gibbs & Candès, 2021). They keep 90% coverage when the market changes, where standard ranges fall below 90%.
+    4. We build an **automatic cleaning step** for the errors in free EGX data.
 
 ## 3. Data used
 
@@ -68,6 +70,7 @@ Free EGX data contains errors that would corrupt every model. The cleaner (`clea
 | **Paper's method** | **TTM + Log-HAR** (equal-weight average) |
 
 **How we score them:**
+
 - Mean absolute error (MAE) on the 2022–2026 test period, with every model scored on the same days.
 - The **Diebold–Mariano test** (Newey-West variance) checks whether each model is significantly better or worse than HAR at the 5% level.
 
