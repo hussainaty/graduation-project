@@ -14,6 +14,7 @@ ACTION_COLUMNS = ("Dividends", "Stock Splits")
 ISSUE_COLUMNS = ("ticker", "date", "reason_code", "source", "reference_date", "ratio", "log_return", "detail")
 SPLIT_TOLERANCE = 0.08
 LARGE_MOVE = 0.20
+IMPOSSIBLE_MOVE = 0.40
 
 
 @dataclass(frozen=True)
@@ -117,7 +118,7 @@ def load_clean(
         actions = actions.copy()
         actions.index = normalize_dates(actions.index)
         actions = actions.loc[actions.index.notna() & ~actions.index.duplicated(keep="last")]
-        actions = actions.reindex(columns=ACTION_COLUMNS).apply(pd.to_numeric, errors="coerce")
+        actions = actions.reindex(columns=ACTION_COLUMNS).apply(pd.to_numeric, errors="coerce").astype(float)
         ratios = actions["Stock Splits"]
         ratios = ratios.loc[np.isfinite(ratios) & ratios.gt(0) & ratios.ne(1)]
         splits = [Split(date, ratio, source) for date, ratio in ratios.items()]
@@ -163,7 +164,8 @@ def load_clean(
                    detail="Reported date falls outside the price history.")
             continue
         anchor = int(dates.searchsorted(split.date))
-        window = raw_returns.iloc[max(0, anchor - 7):anchor + 3].drop(
+        # Yahoo can record an EGX split up to ~2 weeks late (ADIB/EFID 2025: 11 sessions).
+        window = raw_returns.iloc[max(0, anchor - 15):anchor + 3].drop(
             index=list(selected | spike_days), errors="ignore")
         expected = -np.log(split.ratio)
         # A credible match changes price in the direction implied by the split.
@@ -228,6 +230,21 @@ def load_clean(
             pos = recovery
             break
         pos += 1
+
+    # EGX daily price limits (~+/-20%) make a one-day move above ~49% (|log r| > 0.40)
+    # implausible as trading; treat it as a corporate action Yahoo never recorded
+    # (e.g. MFPC 2024-01-02, RAYA 2018-06-20) and back-adjust earlier prices by it.
+    remaining = close_log_returns(prices)
+    for date, value in remaining.loc[remaining.abs().gt(IMPOSSIBLE_MOVE)].items():
+        if date in matched:
+            continue
+        prices.loc[prices.index < date, list(OHLC)] *= float(np.exp(value))
+        prices.loc[prices.index < date, "Volume"] /= float(np.exp(value))
+        price_factor.loc[price_factor.index < date] *= float(np.exp(value))
+        record("inferred_unrecorded_action", "close_returns", date=date, log_return=value,
+               ratio=float(np.exp(-value)),
+               detail="Move beyond EGX daily limits with no recorded action; prior prices "
+                      "back-adjusted. Verify against EGX disclosures and add to manual file.")
 
     remaining = close_log_returns(prices)
     for date, value in remaining.loc[remaining.abs().gt(LARGE_MOVE)].items():

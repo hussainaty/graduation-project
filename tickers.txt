@@ -1,9 +1,35 @@
-# One Yahoo ticker per line (EGX code + ".CA"). Replace/extend with the current EGX30 list from egx.com.eg
+# EGX30 constituents as of 2026-11-26 (source: egxbot.com/en/index/egx30, cross-checked with investing.com).
+# Re-check against egx.com.eg CurrentIndexConstituntes page at each index review.
 COMI.CA
-FWRY.CA
-ETEL.CA
 HRHO.CA
+# ORAS.CA  excluded: 97% zero-volume days on Yahoo (thin EGX line of a dual listing)
 TMGH.CA
-SWDY.CA
-EAST.CA
+CCAP.CA
+ETEL.CA
+# VLMRA.CA excluded: no Yahoo data
+AMOC.CA
+EGAL.CA
+BTFH.CA
+GBCO.CA
+HELI.CA
+EFID.CA
+ISPH.CA
+ORHD.CA
+RAYA.CA
+# EFIH.CA  excluded: listed Oct 2021, no history in the 2013-2021 training window
+PHDC.CA
+SKPC.CA
 ABUK.CA
+EAST.CA
+CLHO.CA
+MFPC.CA
+JUFO.CA
+FWRY.CA
+EMFD.CA
+ADIB.CA
+MCQE.CA
+RMDA.CA
+ALCN.CA
+# VLMR.CA  excluded: no Yahoo data
+# Not in the 2026-11-26 list but kept from the first pilot:
+SWDY.CA
