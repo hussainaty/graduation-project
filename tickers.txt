@@ -1,0 +1,11 @@
+# One Yahoo ticker per line (EGX code + ".CA"). Replace/extend with the current EGX30 list from egx.com.eg
+COMI.CA
+FWRY.CA
+ETEL.CA
+HRHO.CA
+TMGH.CA
+SWDY.CA
+EAST.CA
+ABUK.CA
+EFIH.CA
+ORAS.CA
