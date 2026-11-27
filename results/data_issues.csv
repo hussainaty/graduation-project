@@ -307,9 +307,9 @@ RAYA.CA,2025-07-07,dividend_price_return,yahoo_actions,,,,Cash dividend retained
 RAYA.CA,2005-05-26,inferred_unrecorded_action,close_returns,,40.14936973590408,-3.6926067425336715,Move beyond EGX daily limits with no recorded action; prior prices back-adjusted. Verify against EGX disclosures and add to manual file.
 RAYA.CA,2010-09-15,inferred_unrecorded_action,close_returns,,0.5703587019738287,0.561489814372357,Move beyond EGX daily limits with no recorded action; prior prices back-adjusted. Verify against EGX disclosures and add to manual file.
 RAYA.CA,2018-06-20,inferred_unrecorded_action,close_returns,,0.361792081920404,1.0166855914997752,Move beyond EGX daily limits with no recorded action; prior prices back-adjusted. Verify against EGX disclosures and add to manual file.
-RAYA.CA,2006-02-16,large_move_unexplained,close_returns,,,-0.2089910739069701,Retained for review.
+RAYA.CA,2006-02-16,large_move_unexplained,close_returns,,,-0.20899107390697005,Retained for review.
 RAYA.CA,2009-04-06,large_move_unexplained,close_returns,,,0.21070937008706392,Retained for review.
-RAYA.CA,2009-05-21,large_move_unexplained,close_returns,,,-0.2008150608488417,Retained for review.
+RAYA.CA,2009-05-21,large_move_unexplained,close_returns,,,-0.20081506084884193,Retained for review.
 PHDC.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
 PHDC.CA,2009-06-18,split_already_adjusted,yahoo_actions,,1.5,,No matching break in raw Close; Yahoo Close already reflects this split.
 PHDC.CA,2016-06-27,split_date_realigned,yahoo_actions,2016-06-23,1.05,-0.04651979631661529,Back-adjusted prior OHLC and applied the inverse factor to volume.
