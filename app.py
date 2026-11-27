@@ -5,6 +5,7 @@ from __future__ import annotations
 from math import isfinite
 from typing import TYPE_CHECKING
 
+from clean_prices import load_clean
 from m1_har import (
     HORIZONS,
     download_prices,
@@ -96,8 +97,13 @@ def main() -> None:
             st.warning(f"Yahoo Finance was unavailable for {ticker}. Showing the local CSV cache.")
 
     try:
-        prices, data_issues = prepare_prices(raw)
-    except ValueError as error:
+        clean = load_clean(ticker, raw=raw)
+        prices, data_issues = prepare_prices(clean)
+        data_issues.insert(0, f"Corporate-action source {clean.attrs['adjustment_source']}.")
+        reversals = sum(issue["reason_code"] == "bad_print_reversal" for issue in clean.attrs["issues"])
+        if reversals:
+            data_issues.append(f"Detected and removed {reversals} reversal-session prices.")
+    except (ValueError, OSError, KeyError) as error:
         st.error(str(error))
         return
     if prices.empty:
@@ -140,7 +146,7 @@ def main() -> None:
             column.caption(f"Adaptive 90% range {interval}")
         elif hi < lo:
             column.caption("Adaptive interval is empty")
-    st.caption("Move sizes use absolute adjusted-close log returns. Horizons count sessions with usable prices.")
+    st.caption("Move sizes use absolute cleaned-close log returns. Horizons count sessions with usable prices.")
 
     issues = data_issues + evaluation.issues
     if issues:
@@ -148,9 +154,9 @@ def main() -> None:
             for issue in issues:
                 st.write(issue)
 
-    st.subheader("Adjusted close")
-    price_fig = px.line(prices.reset_index(), x="date", y="Adj Close",
-                        labels={"date": "Date", "Adj Close": "Adjusted close"})
+    st.subheader("Cleaned close")
+    price_fig = px.line(prices.reset_index(), x="date", y="Price",
+                        labels={"date": "Date", "Price": "Cleaned close"})
     st.plotly_chart(price_fig, width="stretch")
 
     st.subheader("Held-out test performance")
@@ -177,7 +183,7 @@ def main() -> None:
                        "and empty intervals are omitted from the shaded area.")
     else:
         st.caption("Adaptive ranges are evaluated for the top individual model and combination "
-                   "chosen before the test period.")
+                   "chosen before the test period, and for both TTM models when available.")
     forecasts = evaluation.test.loc[
         evaluation.test["model"].eq(model) & evaluation.test["horizon"].eq(horizon)
     ]

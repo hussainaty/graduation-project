@@ -6,3 +6,4 @@ streamlit
 plotly
 pyarrow
 arch
+# Optional TTM backend: python -m pip install git+https://github.com/ibm-granite/granite-tsfm.git

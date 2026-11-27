@@ -1,13 +1,13 @@
-"""Fit and evaluate the price-only M1 models using daily adjusted closes."""
+"""Fit and evaluate price-only M1 models on cleaned EGX closes."""
 
 from dataclasses import dataclass
 from math import ceil, sqrt
-from pathlib import Path
-import re
 
 import numpy as np
 import pandas as pd
 
+from clean_prices import OHLC, ROOT, load_clean, read_raw_prices as read_cached_prices
+from clean_prices import read_tickers, ticker_filename
 from m1_evaluation import (
     adaptive_ranges,
     best_on_validation,
@@ -17,16 +17,14 @@ from m1_evaluation import (
     summarize_results,
 )
 from m1_garch import GARCH_MODELS, garch_features
+from m1_ttm import TTM_MODELS, ttm_forecasts
 
 
-ROOT = Path(__file__).resolve().parent
-PRICES = ROOT / "prices"
 RESULTS = ROOT / "results"
 START = pd.Timestamp("2013-01-01")
 TEST_START = pd.Timestamp("2022-01-01")
 HORIZONS = (1, 5, 20)
 WINDOWS = (1, 5, 22)
-OHLC = ("Open", "High", "Low", "Close")
 ENSEMBLE_MEMBERS = ("HAR", "LHAR", "HAR-RANGE", "GJR-GARCH")
 HARQ_NOTE = (
     "HARQ was skipped because daily OHLCV cannot estimate intraday quarticity. "
@@ -34,6 +32,13 @@ HARQ_NOTE = (
 )
 LOG_FLOOR = 1e-8
 ADAPTIVE_COLUMNS = ["lo_adaptive", "hi_adaptive"]
+CLEANING_TICKERS = ("EAST.CA", "ABUK.CA")
+CLEANING_MODELS = ("HAR", "Log-HAR", "GARCH", "EGARCH")
+COMPARISON_COLUMNS = [
+    "ticker", "horizon", "model", "raw_max_abs_log_return", "clean_max_abs_log_return",
+    "raw_MAE", "clean_MAE", "raw_n_test", "clean_n_test", "raw_student_t_nu", "clean_student_t_nu",
+    "raw_normal_fallback", "clean_normal_fallback", "raw_fit_status", "clean_fit_status",
+]
 FORECAST_COLUMNS = ["date", "horizon", "actual", "point", "lo", "hi"]
 METRIC_COLUMNS = [
     "ticker", "horizon", "model", "MAE", "RMSE", "coverage_90", "avg_width", "n_test",
@@ -49,23 +54,7 @@ class Evaluation:
     latest: pd.DataFrame
     issues: list[str]
     best_combinations: dict[int, str]
-
-
-def read_tickers() -> list[str]:
-    lines = (ROOT / "tickers.txt").read_text(encoding="utf-8-sig").splitlines()
-    tickers = (line.partition("#")[0].strip().upper() for line in lines)
-    return list(dict.fromkeys(ticker for ticker in tickers if ticker))
-
-
-def ticker_filename(ticker: str) -> str:
-    # Yahoo symbols can contain exchange suffixes, hyphens, or a prefix such as ^.
-    if not re.fullmatch(r"[A-Z0-9^][A-Z0-9.^=_-]*", ticker):
-        raise ValueError("Enter a valid Yahoo Finance ticker, such as COMI.CA.")
-    return ticker.replace(".", "_")
-
-
-def read_cached_prices(ticker: str) -> pd.DataFrame:
-    return pd.read_csv(PRICES / (ticker_filename(ticker) + ".csv")).set_index("date")
+    garch_diagnostics: dict[str, dict]
 
 
 def download_prices(ticker: str) -> pd.DataFrame:
@@ -81,15 +70,18 @@ def download_prices(ticker: str) -> pd.DataFrame:
     return prices
 
 
-def prepare_prices(raw: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
-    required = ["Adj Close", "Volume"]
+def prepare_prices(
+    raw: pd.DataFrame, price_column: str = "Close",
+) -> tuple[pd.DataFrame, list[str]]:
+    required = [price_column, "Volume"]
     missing = set(required).difference(raw.columns)
     if missing:
         raise ValueError(f"Missing price columns: {', '.join(sorted(missing))}")
 
     dates = pd.to_datetime(raw.index, errors="coerce", utc=True).tz_convert(None).normalize()
-    # Keep optional OHLC for range and overnight features. Target days depend only on adjusted close and volume.
-    prices = raw.reindex(columns=[*required, *OHLC]).apply(pd.to_numeric, errors="coerce").set_axis(dates)
+    # Keep OHLC for range and overnight features and a separate model price for baseline comparisons.
+    prices = raw.reindex(columns=["Volume", *OHLC]).apply(pd.to_numeric, errors="coerce").set_axis(dates)
+    prices["Price"] = pd.to_numeric(raw[price_column], errors="coerce").to_numpy()
     prices[list(OHLC)] = prices[list(OHLC)].where(np.isfinite(prices[list(OHLC)]) & prices[list(OHLC)].gt(0))
     prices.index.name = "date"
     bad_dates = int(prices.index.isna().sum())
@@ -98,8 +90,8 @@ def prepare_prices(raw: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     prices = prices.loc[~prices.index.duplicated(keep="last")].sort_index()
     stale = prices["Volume"].eq(0)
     usable = (
-        np.isfinite(prices[required]).all(axis=1)
-        & prices["Adj Close"].gt(0)
+        np.isfinite(prices[["Price", "Volume"]]).all(axis=1)
+        & prices["Price"].gt(0)
         & prices["Volume"].gt(0)
     )
     invalid = int((~usable & ~stale).sum())
@@ -111,7 +103,11 @@ def prepare_prices(raw: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
         )
     if stale.any():
         issues.append(f"Excluded {int(stale.sum())} zero-volume rows since {START.date()}.")
-    return prices.loc[usable], issues
+    prices = prices.loc[usable]
+    if "adjustment_source" in raw.attrs:
+        prices.attrs["adjustment_source"] = raw.attrs["adjustment_source"]
+        prices.attrs["issues"] = raw.attrs["issues"]
+    return prices, issues
 
 
 def make_features(log_price: pd.Series) -> pd.DataFrame:
@@ -145,7 +141,7 @@ def load_watchlist() -> tuple[dict[str, pd.DataFrame], list[str]]:
     issues = []
     for ticker in read_tickers():
         try:
-            prices, notes = prepare_prices(read_cached_prices(ticker))
+            prices, notes = prepare_prices(load_clean(ticker))
         except (OSError, ValueError, KeyError) as error:
             issues.append(f"{ticker}: {error}")
             continue
@@ -155,7 +151,7 @@ def load_watchlist() -> tuple[dict[str, pd.DataFrame], list[str]]:
 
 
 def market_volatility(prices_by_ticker: dict[str, pd.DataFrame]) -> pd.Series:
-    returns = [np.log(prices["Adj Close"]).diff().abs() for prices in prices_by_ticker.values()]
+    returns = [np.log(prices["Price"]).diff().abs() for prices in prices_by_ticker.values()]
     if not returns:
         return pd.Series(dtype=float, index=pd.DatetimeIndex([]))
     return pd.concat(returns, axis=1, sort=True).mean(axis=1).dropna().rename("market_vol")
@@ -258,22 +254,29 @@ def forecast_metrics(
 
 
 def evaluate_ticker(
-    ticker: str, prices: pd.DataFrame, market: pd.Series | None = None,
+    ticker: str, prices: pd.DataFrame, market: pd.Series | None = None, *, include_ttm: bool = True,
 ) -> Evaluation:
     if market is None:
         watchlist, _ = load_watchlist()
         if ticker in watchlist:
             watchlist[ticker] = prices
         market = market_volatility(watchlist)
-    log_price = np.log(prices["Adj Close"])
+    log_price = np.log(prices["Price"])
     features, designs = price_features(prices, log_price, market)
     splits = {h: split_horizon(features, log_price, h) for h in HORIZONS}
     eligible = {h: split for h, split in splits.items()
                 if len(split[0]) >= len(WINDOWS) + 1 and len(split[1]) >= 9}
     garch, hybrid, issues = {}, pd.DataFrame(), []
+    garch_diagnostics = {}
+    ttm = pd.DataFrame()
     if eligible:
         first_calibration = min(split[1].index[0] for split in eligible.values())
-        garch, hybrid, issues = garch_features(log_price.diff(), first_calibration, tuple(eligible))
+        returns = log_price.diff()
+        garch, hybrid, issues = garch_features(returns, first_calibration, tuple(eligible), garch_diagnostics)
+        if include_ttm:
+            ttm, ttm_issue = ttm_forecasts(returns, features.loc[first_calibration:].index, tuple(eligible))
+            if ttm_issue:
+                issues.append(ttm_issue)
     metrics, test_rows, latest_rows = [], [], []
     best_combinations = {}
 
@@ -309,6 +312,10 @@ def evaluate_ticker(
         )
         if best_combo is not None:
             best_combinations[horizon] = best_combo
+        if not ttm.empty:
+            points["TTM"] = ttm[horizon].reindex(inputs.index)
+            if "Log-HAR" in points:
+                points["TTM+Log-HAR"] = (points["TTM"] + points["Log-HAR"]) / 2
 
         for name in points:
             learned_combo = name.startswith(("Combo Inv-MSE", "Combo Ridge"))
@@ -328,7 +335,13 @@ def evaluate_ticker(
             forecasts["horizon"] = horizon
             forecasts["model"] = name
             forecasts["lo_adaptive"] = forecasts["hi_adaptive"] = np.nan
-            role = "Combination" if name == best_combo else "Individual" if name == best_individual else None
+            role = None
+            if name == best_combo:
+                role = "Combination"
+            elif name == best_individual:
+                role = "Individual"
+            elif name in TTM_MODELS:
+                role = name
             if role is not None:
                 forecasts["lo_adaptive"], forecasts["hi_adaptive"] = adaptive_ranges(forecasts, scores.to_numpy())
 
@@ -346,14 +359,54 @@ def evaluate_ticker(
         pd.concat(latest_rows, ignore_index=True)[columns] if latest_rows else pd.DataFrame(columns=columns),
         list(dict.fromkeys(issues)),
         best_combinations,
+        garch_diagnostics,
     )
 
 
-def write_summary(metrics: pd.DataFrame, summary: pd.DataFrame, issues: list[str]) -> None:
+def compare_cleaning(current: dict[str, tuple[pd.DataFrame, Evaluation]]) -> pd.DataFrame:
+    original = {}
+    for ticker in read_tickers():
+        try:
+            original[ticker], _ = prepare_prices(read_cached_prices(ticker), price_column="Adj Close")
+        except (OSError, ValueError, KeyError):
+            continue
+    original_market = market_volatility(original)
+    rows = []
+    for ticker in CLEANING_TICKERS:
+        if ticker not in original or ticker not in current:
+            continue
+        clean_prices, clean_evaluation = current[ticker]
+        raw_evaluation = evaluate_ticker(ticker, original[ticker], original_market, include_ttm=False)
+        raw_metrics = raw_evaluation.metrics.set_index(["horizon", "model"])
+        clean_metrics = clean_evaluation.metrics.set_index(["horizon", "model"])
+        raw_max = np.log(original[ticker]["Price"]).diff().abs().max()
+        clean_max = np.log(clean_prices["Price"]).diff().abs().max()
+        for horizon in HORIZONS:
+            for model in CLEANING_MODELS:
+                key = (horizon, model)
+                row = {"ticker": ticker, "horizon": horizon, "model": model,
+                       "raw_max_abs_log_return": raw_max, "clean_max_abs_log_return": clean_max}
+                for prefix, metrics, evaluation in (
+                    ("raw", raw_metrics, raw_evaluation), ("clean", clean_metrics, clean_evaluation),
+                ):
+                    row[f"{prefix}_MAE"] = metrics.at[key, "MAE"] if key in metrics.index else np.nan
+                    row[f"{prefix}_n_test"] = metrics.at[key, "n_test"] if key in metrics.index else np.nan
+                    diagnostics = evaluation.garch_diagnostics.get(model, {})
+                    for name in ("student_t_nu", "normal_fallback"):
+                        row[f"{prefix}_{name}"] = diagnostics.get(name)
+                    row[f"{prefix}_fit_status"] = diagnostics.get("status")
+                rows.append(row)
+    return pd.DataFrame(rows, columns=COMPARISON_COLUMNS)
+
+
+def write_summary(
+    metrics: pd.DataFrame, summary: pd.DataFrame, issues: list[str],
+    watchlist: dict[str, pd.DataFrame], comparison: pd.DataFrame,
+) -> None:
     lines = [
         "# M1 results",
         "",
-        "The backtest forecasts absolute adjusted-close log returns for 1, 5, and 20 retained sessions.",
+        "The backtest forecasts absolute cleaned-close log returns for 1, 5, and 20 retained sessions.",
         "Average MAE rank gives each ticker equal weight within a horizon. Rank 1 is best.",
         "Diebold–Mariano counts use paired absolute errors, a two-sided 5% threshold, and "
         "Newey–West variance with h−1 lags. The p-values are unadjusted for multiple comparisons.",
@@ -377,9 +430,9 @@ def write_summary(metrics: pd.DataFrame, summary: pd.DataFrame, issues: list[str
             lines.append(f"- {' and '.join(leaders)} tied for the lowest average rank at {horizon} {sessions} ({rank:.2f}).")
         else:
             lines.append(f"- {leaders[0]} had the lowest average rank at {horizon} {sessions} ({rank:.2f}).")
-    comparison = summary.loc[summary["model"].isin(["HAR-X", *GARCH_MODELS, "HAR-GARCH"])]
+    head_to_head = summary.loc[summary["model"].isin(["HAR-X", *GARCH_MODELS, "HAR-GARCH"])]
     har_rank = summary.loc[summary["model"].eq("HAR")].set_index("horizon")["avg_mae_rank"]
-    for model, group in comparison.groupby("model"):
+    for model, group in head_to_head.groupby("model"):
         ranked_better = group["avg_mae_rank"].lt(group["horizon"].map(har_rank)).sum()
         detail = ", ".join(
             f"{row.horizon}-session {row.significant_wins_vs_har}/{row.n_tickers} wins "
@@ -399,7 +452,7 @@ def write_summary(metrics: pd.DataFrame, summary: pd.DataFrame, issues: list[str
     lines.extend([
         "", "## Adaptive coverage", "",
         "Each ticker and horizon chooses an individual model and a combination using pre-2022 validation MAE. "
-        "The rows below compare both intervals on exactly those selected forecasts.",
+        "The rows below compare both intervals on the same forecasts. TTM models are reported separately when available.",
         "Adaptive updates use gamma 0.005 after the h-session outcome is observed.",
         "",
         "| Sessions | Selected model type | Tickers | Standard coverage | Adaptive coverage | Unbounded adaptive share |",
@@ -410,7 +463,7 @@ def write_summary(metrics: pd.DataFrame, summary: pd.DataFrame, issues: list[str
         adaptive = rows["coverage_90_adaptive"].mean()
         unbounded = rows["unbounded_rate_adaptive"].mean()
         lines.append(f"| {horizon} | {role} | {len(rows)} | {fixed:.1%} | {adaptive:.1%} | {unbounded:.1%} |")
-    selected = metrics.dropna(subset=["coverage_90_adaptive"])
+    selected = metrics.loc[metrics["adaptive_role"].isin(["Combination", "Individual"])]
     if not selected.empty:
         fixed, adaptive = selected[["coverage_90", "coverage_90_adaptive"]].mean()
         reached = selected["coverage_90_adaptive"].ge(0.90).sum()
@@ -422,7 +475,75 @@ def write_summary(metrics: pd.DataFrame, summary: pd.DataFrame, issues: list[str
         ])
 
     lines.extend([
-        "", "## Data and model notes", "",
+        "", "## Data cleaning", "",
+        "M1 uses split-adjusted Close and keeps cash-dividend moves as price returns. "
+        "Reversal detection and the placement of reported splits use nearby historical sessions, "
+        "so this is a retrospective clean of the price history.",
+        "The cleaned CSVs and data_issues.csv provide the event dates, source, and reasons.",
+        "",
+        "| Ticker | Source | Split adjustments | Unconfirmed candidates | Reversal rows nulled | Large moves retained |",
+        "|---|---|---:|---:|---:|---:|",
+    ])
+    for ticker, prices in watchlist.items():
+        audit = prices.attrs.get("issues", [])
+        counts = pd.Series([issue["reason_code"] for issue in audit], dtype=str).value_counts()
+        adjusted = sum(counts.get(code, 0) for code in (
+            "split_adjusted", "split_date_realigned", "split_date_unmatched",
+        ))
+        lines.append(
+            f"| {ticker} | {prices.attrs.get('adjustment_source', 'unknown')} | {adjusted} | "
+            f"{counts.get('split_candidate_unconfirmed', 0)} | {counts.get('bad_print_reversal', 0)} | "
+            f"{counts.get('large_move_unexplained', 0)} |"
+        )
+    if not comparison.empty:
+        lines.extend([
+            "", "### EAST.CA and ABUK.CA before and after", "",
+            "The baseline is the previous Yahoo Adj Close model. Maximum daily moves use retained "
+            "sessions from 2013 onward. The comparison CSV gives MAE and observation counts for each "
+            "horizon and captures Student-t nu before any Gaussian refit.",
+            "",
+            "| Ticker | Max abs log return before | After | GARCH nu before → after | EGARCH nu before → after |",
+            "|---|---:|---:|---:|---:|",
+        ])
+        for ticker, rows in comparison.loc[comparison["horizon"].eq(1)].groupby("ticker"):
+            row = rows.iloc[0]
+            nus = []
+            for name in ("GARCH", "EGARCH"):
+                fit = rows.loc[rows["model"].eq(name)].iloc[0]
+                pair = []
+                for prefix in ("raw", "clean"):
+                    nu = fit[f"{prefix}_student_t_nu"]
+                    flag = fit[f"{prefix}_normal_fallback"]
+                    pair.append(f"{nu:.3f}" + (" (Gaussian refit)" if flag else "") if pd.notna(nu) else "unavailable")
+                nus.append(" → ".join(pair))
+            lines.append(
+                f"| {ticker} | {row.raw_max_abs_log_return:.2%} | {row.clean_max_abs_log_return:.2%} | "
+                f"{nus[0]} | {nus[1]} |"
+            )
+        lines.extend([
+            "",
+            "| Ticker | Model | MAE before → after at 1 session | At 5 sessions | At 20 sessions |",
+            "|---|---|---:|---:|---:|",
+        ])
+        available = comparison.dropna(subset=["raw_MAE", "clean_MAE"])
+        for (ticker, model), rows in available.groupby(["ticker", "model"]):
+            values = rows.set_index("horizon")
+            cells = [f"{values.at[h, 'raw_MAE']:.3%} → {values.at[h, 'clean_MAE']:.3%}"
+                     if h in values.index else "unavailable" for h in HORIZONS]
+            lines.append(f"| {ticker} | {model} | {' | '.join(cells)} |")
+
+    lines.extend([
+        "", "## TTM comparison", "",
+        "TTM uses the frozen IBM Granite checkpoint and a 512-session trailing window per origin. "
+        "TTM+Log-HAR averages its point forecasts with Log-HAR. Each available model receives "
+        "standard and adaptive ranges and a paired Diebold?Mariano comparison against HAR.",
+        (
+            "TTM models were scored where enough forecast and calibration history was available."
+            if metrics["model"].isin(TTM_MODELS).any()
+            else "TTM models have no scored results in this run. See the issue messages below."
+        ),
+        "",
+        "## Data and model notes", "",
         "- Forecast CSVs retain the standard HAR backtest and the original six columns.",
         "- A three-member combination uses HAR, LHAR, and HAR-RANGE when a GJR-GARCH forecast is unavailable.",
         f"- {HARQ_NOTE}",
@@ -436,6 +557,7 @@ def main() -> int:
     watchlist, issues = load_watchlist()
     market = market_volatility(watchlist)
     tables = []
+    current = {}
     for ticker in read_tickers():
         filename = RESULTS / f"forecasts_{ticker_filename(ticker)}.csv"
         if ticker not in watchlist:
@@ -443,10 +565,14 @@ def main() -> int:
             continue
 
         evaluation = evaluate_ticker(ticker, watchlist[ticker], market)
+        if ticker in CLEANING_TICKERS:
+            current[ticker] = (watchlist[ticker], evaluation)
         if not evaluation.metrics.empty:
             tables.append(evaluation.metrics)
-        issues.extend(note if note.startswith("arch is unavailable") else f"{ticker}: {note}"
-                      for note in evaluation.issues)
+        for note in evaluation.issues:
+            shared = note.startswith(("arch is unavailable", "TTM and TTM+Log-HAR were skipped because tsfm_public",
+                                      "TTM and TTM+Log-HAR were skipped because the checkpoint could not load"))
+            issues.append(note if shared else f"{ticker}: {note}")
         har = evaluation.test.loc[evaluation.test["model"].eq("HAR"), FORECAST_COLUMNS]
         har.to_csv(filename, index=False)
 
@@ -454,7 +580,9 @@ def main() -> int:
     summary = summarize_results(metrics)
     metrics.to_csv(RESULTS / "m1_results.csv", index=False)
     summary.to_csv(RESULTS / "m1_summary.csv", index=False)
-    write_summary(metrics, summary, issues)
+    comparison = compare_cleaning(current)
+    comparison.to_csv(RESULTS / "m1_cleaning_comparison.csv", index=False)
+    write_summary(metrics, summary, issues, watchlist, comparison)
     for issue in dict.fromkeys(issues):
         print(issue)
     print()

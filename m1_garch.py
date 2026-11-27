@@ -66,14 +66,18 @@ def cumulative_forecasts(
 
 def fit_volatility(
     arch_model, returns: pd.Series, estimation: pd.Series, model_name: str,
-    horizons: tuple[int, ...],
+    horizons: tuple[int, ...], diagnostics: dict | None = None,
 ) -> pd.DataFrame:
     kind, asymmetry = GARCH_MODELS[model_name]
     result = arch_model(
         estimation, mean="Zero", vol=kind, p=1, o=asymmetry, q=1, dist="t", rescale=False,
     ).fit(disp="off", show_warning=False)
-    if float(result.params.get("nu", np.inf)) < 3:
-        # Degenerate Student-t fit (nu -> 2 means infinite variance), seen on stocks with
+    student_nu = float(result.params.get("nu", np.nan))
+    normal_fallback = student_nu < 3
+    if diagnostics is not None:
+        diagnostics.update(student_t_nu=student_nu, normal_fallback=normal_fallback)
+    if normal_fallback:
+        # Guard against fits close to the nu=2 boundary of finite Student-t variance, seen with
         # data glitches/stale prices. Refit with normal errors instead.
         result = arch_model(
             estimation, mean="Zero", vol=kind, p=1, o=asymmetry, q=1, dist="normal", rescale=False,
@@ -90,10 +94,13 @@ def fit_volatility(
 
 def garch_features(
     returns: pd.Series, calibration_start: pd.Timestamp, horizons: tuple[int, ...],
+    diagnostics: dict[str, dict] | None = None,
 ) -> tuple[dict[str, pd.DataFrame], pd.DataFrame, list[str]]:
+    diagnostics = {} if diagnostics is None else diagnostics
     try:
         from arch import arch_model
     except ImportError:
+        diagnostics.update({name: {"status": "arch_unavailable"} for name in (*GARCH_MODELS, "HAR-GARCH")})
         return {}, pd.DataFrame(), [
             "arch is unavailable. GARCH, GJR-GARCH, EGARCH, and HAR-GARCH were skipped."
         ]
@@ -104,18 +111,24 @@ def garch_features(
     issues = []
     for name in GARCH_MODELS:
         try:
-            variance = fit_volatility(arch_model, percent, estimation, name, horizons)
+            fit = diagnostics.setdefault(name, {})
+            variance = fit_volatility(arch_model, percent, estimation, name, horizons, fit)
+            fit["status"] = "ok"
             forecasts[name] = np.sqrt(variance) * (NORMAL_ABS_MEAN / 100)
         except (ValueError, ArithmeticError) as error:
+            diagnostics[name]["status"] = str(error)
             issues.append(f"{name} was skipped because {error}.")
 
     # The hybrid uses a causal training covariate with an earlier parameter cutoff.
     # Its volatility estimates start on the last session of this estimation prefix.
     try:
         prefix = estimation.iloc[: len(estimation) // 2]
-        variance = fit_volatility(arch_model, percent, prefix, "GARCH", horizons)
+        fit = diagnostics.setdefault("HAR-GARCH", {})
+        variance = fit_volatility(arch_model, percent, prefix, "GARCH", horizons, fit)
+        fit["status"] = "ok"
         hybrid = np.sqrt(variance) / 100
     except (ValueError, ArithmeticError) as error:
+        diagnostics["HAR-GARCH"]["status"] = str(error)
         issues.append(f"HAR-GARCH was skipped because its GARCH feature failed ({error}).")
         hybrid = pd.DataFrame()
     return forecasts, hybrid, issues

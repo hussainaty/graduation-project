@@ -1,0 +1,273 @@
+ticker,date,reason_code,source,reference_date,ratio,log_return,detail
+COMI.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+COMI.CA,2003-12-30,split_already_adjusted,yahoo_actions,,2.0,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2006-08-31,split_already_adjusted,yahoo_actions,,1.5,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2008-07-31,split_already_adjusted,yahoo_actions,,1.5,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2010-07-15,split_already_adjusted,yahoo_actions,,2.0,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2013-12-05,split_already_adjusted,yahoo_actions,,1.5,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2015-12-10,split_already_adjusted,yahoo_actions,,1.25,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2019-02-14,split_already_adjusted,yahoo_actions,,1.25,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2021-08-16,split_already_adjusted,yahoo_actions,,1.333333,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2022-09-22,split_already_adjusted,yahoo_actions,,1.50441,,No matching break in raw Close; Yahoo Close already reflects this split.
+COMI.CA,2025-12-08,split_date_realigned,yahoo_actions,2025-12-17,1.1,-0.08163470083541036,Back-adjusted prior OHLC and applied the inverse factor to volume.
+COMI.CA,2002-04-15,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2003-03-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2004-03-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2005-04-12,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2006-04-04,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2007-03-27,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2008-04-01,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2009-03-17,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2010-03-30,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2011-04-05,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2012-04-03,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2013-04-02,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2014-03-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2015-03-31,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2016-03-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2017-04-04,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2018-03-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2019-03-26,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2020-04-07,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2022-04-05,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2023-04-04,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2024-04-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2025-04-08,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2026-04-07,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+COMI.CA,2008-10-08,large_move_unexplained,close_returns,,,-0.21547099606943965,Retained for review.
+FWRY.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+FWRY.CA,2021-03-11,split_already_adjusted,yahoo_actions,,1.282763,,No matching break in raw Close; Yahoo Close already reflects this split.
+ETEL.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+ETEL.CA,2006-04-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2007-04-23,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2008-04-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2009-04-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2010-04-27,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2010-06-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2011-05-24,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2012-02-14,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2012-04-09,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2013-04-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2014-04-23,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2014-09-30,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2015-04-21,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2016-04-26,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2017-04-24,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2018-04-24,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2019-04-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2020-04-16,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2021-04-26,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2022-04-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2023-04-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2024-04-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2025-04-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2026-04-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ETEL.CA,2008-05-15,bad_print_reversal,close_returns,2008-05-19,,-0.17783005015694897,Price set to NaN. Recovery session retained.
+ETEL.CA,2026-02-15,bad_print_reversal,close_returns,2026-02-16,,0.1739657027713255,Price set to NaN. Recovery session retained.
+ETEL.CA,2008-10-07,large_move_unexplained,close_returns,,,-0.2151113956675652,Retained for review.
+HRHO.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+HRHO.CA,2011-10-03,split_already_adjusted,yahoo_actions,,1.25,,No matching break in raw Close; Yahoo Close already reflects this split.
+HRHO.CA,2013-09-30,split_already_adjusted,yahoo_actions,,1.2,,No matching break in raw Close; Yahoo Close already reflects this split.
+HRHO.CA,2015-07-30,split_already_adjusted,yahoo_actions,,1.13665,,No matching break in raw Close; Yahoo Close already reflects this split.
+HRHO.CA,2018-07-12,split_already_adjusted,yahoo_actions,,1.25,,No matching break in raw Close; Yahoo Close already reflects this split.
+HRHO.CA,2021-07-26,split_already_adjusted,yahoo_actions,,1.2,,No matching break in raw Close; Yahoo Close already reflects this split.
+HRHO.CA,2022-07-19,split_already_adjusted,yahoo_actions,,1.2,,No matching break in raw Close; Yahoo Close already reflects this split.
+HRHO.CA,2023-07-31,split_already_adjusted,yahoo_actions,,1.25,,No matching break in raw Close; Yahoo Close already reflects this split.
+HRHO.CA,2007-04-05,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2008-05-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2009-05-04,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2010-05-06,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2010-07-13,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2017-05-23,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2019-06-10,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2026-06-25,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+HRHO.CA,2003-09-08,bad_print_reversal,close_returns,2003-09-10,,0.21681005889642513,Price set to NaN. Recovery session retained.
+HRHO.CA,2003-09-09,bad_print_reversal,close_returns,2003-09-10,,0.18373280192534835,Price set to NaN. Recovery session retained.
+HRHO.CA,2003-11-03,bad_print_reversal,close_returns,2003-11-05,,-0.184125474793786,Price set to NaN. Recovery session retained.
+HRHO.CA,2003-11-04,bad_print_reversal,close_returns,2003-11-05,,0.03080809378806887,Price set to NaN. Recovery session retained.
+HRHO.CA,2004-02-03,bad_print_reversal,close_returns,2004-02-09,,-0.15217711020680627,Price set to NaN. Recovery session retained.
+HRHO.CA,2004-02-05,bad_print_reversal,close_returns,2004-02-09,,0.0690771138221988,Price set to NaN. Recovery session retained.
+HRHO.CA,2006-05-22,large_move_unexplained,close_returns,,,-0.21141634365828166,Retained for review.
+HRHO.CA,2006-06-12,large_move_unexplained,close_returns,,,-0.2007054424019794,Retained for review.
+HRHO.CA,2006-06-19,large_move_unexplained,close_returns,,,0.21217452361189748,Retained for review.
+HRHO.CA,2008-10-07,large_move_unexplained,close_returns,,,-0.28928004494465664,Retained for review.
+HRHO.CA,2008-10-23,large_move_unexplained,close_returns,,,-0.21221438391591607,Retained for review.
+HRHO.CA,2008-11-17,large_move_unexplained,close_returns,,,-0.213425168057793,Retained for review.
+HRHO.CA,2022-04-14,large_move_unexplained,close_returns,,,-0.22288474884304232,Retained for review.
+TMGH.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+TMGH.CA,2011-06-26,split_date_realigned,yahoo_actions,2011-06-23,1.025,-0.024001129208063077,Back-adjusted prior OHLC and applied the inverse factor to volume.
+TMGH.CA,2014-04-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2015-04-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2016-04-19,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2017-04-23,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2018-04-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2019-05-13,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2020-05-12,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2021-05-10,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2022-05-11,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2024-05-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2025-05-27,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2026-05-19,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+TMGH.CA,2008-10-07,large_move_unexplained,close_returns,,,-0.267716741926757,Retained for review.
+SWDY.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+SWDY.CA,2008-08-11,split_date_realigned,yahoo_actions,2008-08-18,1.1,-0.14482158294097447,Back-adjusted prior OHLC and applied the inverse factor to volume.
+SWDY.CA,2010-10-05,split_already_adjusted,yahoo_actions,,1.3,,No matching break in raw Close; Yahoo Close already reflects this split.
+SWDY.CA,2011-09-12,split_already_adjusted,yahoo_actions,,1.3,,No matching break in raw Close; Yahoo Close already reflects this split.
+SWDY.CA,2018-09-27,split_already_adjusted,yahoo_actions,,10.0,,No matching break in raw Close; Yahoo Close already reflects this split.
+SWDY.CA,2009-05-12,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2011-06-01,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2012-07-08,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2013-06-27,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2015-11-05,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2016-02-03,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2016-07-03,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2016-09-25,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2017-01-31,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2017-10-08,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2018-06-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2019-05-06,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2020-04-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2021-05-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2023-05-17,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2024-05-27,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2025-05-13,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2026-06-02,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+SWDY.CA,2008-03-27,bad_print_reversal,close_returns,2008-03-31,,-0.1541506798272585,Price set to NaN. Recovery session retained.
+SWDY.CA,2008-10-08,bad_print_reversal,close_returns,2008-10-09,,-0.15415072779481465,Price set to NaN. Recovery session retained.
+SWDY.CA,2024-10-03,bad_print_reversal,close_returns,2024-10-08,,0.17890471289614407,Price set to NaN. Recovery session retained.
+SWDY.CA,2024-10-07,bad_print_reversal,close_returns,2024-10-08,,0.1113015784402771,Price set to NaN. Recovery session retained.
+SWDY.CA,2025-12-08,bad_print_reversal,close_returns,2025-12-09,,-0.15021835462861333,Price set to NaN. Recovery session retained.
+SWDY.CA,2008-10-07,large_move_unexplained,close_returns,,,-0.36424635280071294,Retained for review.
+EAST.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+EAST.CA,2017-01-12,split_already_adjusted,yahoo_actions,,2.0,,No matching break in raw Close; Yahoo Close already reflects this split.
+EAST.CA,2018-04-30,split_already_adjusted,yahoo_actions,,3.0,,No matching break in raw Close; Yahoo Close already reflects this split.
+EAST.CA,2018-08-16,split_already_adjusted,yahoo_actions,,1.5,,No matching break in raw Close; Yahoo Close already reflects this split.
+EAST.CA,2018-09-27,split_already_adjusted,yahoo_actions,,5.0,,No matching break in raw Close; Yahoo Close already reflects this split.
+EAST.CA,2024-06-02,split_date_realigned,yahoo_actions,2024-06-06,1.345291,-0.3563299925109371,Back-adjusted prior OHLC and applied the inverse factor to volume.
+EAST.CA,2001-11-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2002-11-19,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2003-11-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2004-10-28,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2005-10-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2006-10-31,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2007-11-14,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2008-11-11,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2009-11-10,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2010-10-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2011-10-31,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2012-10-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2013-11-04,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2014-11-11,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2015-12-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2016-11-02,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2017-10-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2018-06-11,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2018-10-16,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2019-11-12,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2020-11-11,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2021-11-29,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2022-11-21,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2023-10-24,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2024-10-17,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2025-12-07,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2026-05-21,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+EAST.CA,2002-09-19,bad_print_reversal,close_returns,2002-09-23,,-0.15672104132491108,Price set to NaN. Recovery session retained.
+EAST.CA,2002-09-26,bad_print_reversal,close_returns,2002-09-30,,-0.19690200699076812,Price set to NaN. Recovery session retained.
+EAST.CA,2002-10-03,bad_print_reversal,close_returns,2002-10-08,,-0.2547708963465956,Price set to NaN. Recovery session retained.
+EAST.CA,2002-10-10,bad_print_reversal,close_returns,2002-10-14,,-0.3596413178289342,Price set to NaN. Recovery session retained.
+EAST.CA,2002-10-17,bad_print_reversal,close_returns,2002-10-21,,-0.3240157896514666,Price set to NaN. Recovery session retained.
+EAST.CA,2002-10-23,bad_print_reversal,close_returns,2002-10-28,,-0.29598557037234074,Price set to NaN. Recovery session retained.
+EAST.CA,2002-10-29,bad_print_reversal,close_returns,2002-11-04,,-0.26172838058484316,Price set to NaN. Recovery session retained.
+EAST.CA,2002-11-07,bad_print_reversal,close_returns,2002-11-11,,-0.29181257840969343,Price set to NaN. Recovery session retained.
+EAST.CA,2002-11-26,bad_print_reversal,close_returns,2002-11-28,,0.22683755839585967,Price set to NaN. Recovery session retained.
+EAST.CA,2002-11-27,bad_print_reversal,close_returns,2002-11-28,,0.048291384820017894,Price set to NaN. Recovery session retained.
+EAST.CA,2002-12-26,bad_print_reversal,close_returns,2002-12-30,,-0.3428513133420438,Price set to NaN. Recovery session retained.
+EAST.CA,2003-01-14,bad_print_reversal,close_returns,2003-01-19,,-0.33956340495093934,Price set to NaN. Recovery session retained.
+EAST.CA,2003-01-16,bad_print_reversal,close_returns,2003-01-19,,0.0,Price set to NaN. Recovery session retained.
+EAST.CA,2003-01-23,bad_print_reversal,close_returns,2003-01-29,,-0.2641604664273599,Price set to NaN. Recovery session retained.
+EAST.CA,2003-01-27,bad_print_reversal,close_returns,2003-01-29,,0.0,Price set to NaN. Recovery session retained.
+EAST.CA,2003-02-06,bad_print_reversal,close_returns,2003-02-17,,-0.33365208139404595,Price set to NaN. Recovery session retained.
+EAST.CA,2003-02-09,bad_print_reversal,close_returns,2003-02-17,,0.0,Price set to NaN. Recovery session retained.
+EAST.CA,2003-02-20,bad_print_reversal,close_returns,2003-02-24,,-0.2921758299036161,Price set to NaN. Recovery session retained.
+EAST.CA,2003-03-12,bad_print_reversal,close_returns,2003-03-13,,0.2641604664273599,Price set to NaN. Recovery session retained.
+EAST.CA,2003-03-18,bad_print_reversal,close_returns,2003-03-20,,0.2547708963465956,Price set to NaN. Recovery session retained.
+EAST.CA,2003-03-19,bad_print_reversal,close_returns,2003-03-20,,-0.0005656509315212221,Price set to NaN. Recovery session retained.
+EAST.CA,2003-03-26,bad_print_reversal,close_returns,2003-03-27,,0.2622897932049447,Price set to NaN. Recovery session retained.
+EAST.CA,2003-04-17,bad_print_reversal,close_returns,2003-04-21,,-0.32788155052278906,Price set to NaN. Recovery session retained.
+EAST.CA,2003-04-24,bad_print_reversal,close_returns,2003-04-29,,-0.33400045077403984,Price set to NaN. Recovery session retained.
+EAST.CA,2003-04-30,bad_print_reversal,close_returns,2003-05-05,,-0.33678584278770224,Price set to NaN. Recovery session retained.
+EAST.CA,2006-07-20,bad_print_reversal,close_returns,2006-07-24,,-0.16480788900130428,Price set to NaN. Recovery session retained.
+EAST.CA,2007-08-14,bad_print_reversal,close_returns,2007-08-16,,-0.2458093356459785,Price set to NaN. Recovery session retained.
+EAST.CA,2007-10-17,bad_print_reversal,close_returns,2007-10-18,,-0.2793409426116411,Price set to NaN. Recovery session retained.
+EAST.CA,2008-09-21,bad_print_reversal,close_returns,2008-09-24,,-0.20771631741379548,Price set to NaN. Recovery session retained.
+EAST.CA,2009-02-23,bad_print_reversal,close_returns,2009-02-24,,-0.1717021935991936,Price set to NaN. Recovery session retained.
+EAST.CA,2018-08-16,bad_print_reversal,close_returns,2018-08-19,,0.375577594126542,Price set to NaN. Recovery session retained.
+EAST.CA,2002-11-14,large_move_unexplained,close_returns,,,-0.29562292307812027,Retained for review.
+EAST.CA,2002-12-02,large_move_unexplained,close_returns,,,0.3285829501343159,Retained for review.
+EAST.CA,2003-01-30,large_move_unexplained,close_returns,,,-0.27346368538490184,Retained for review.
+EAST.CA,2003-02-03,large_move_unexplained,close_returns,,,0.4355194242584402,Retained for review.
+EAST.CA,2003-02-27,large_move_unexplained,close_returns,,,-0.32753038380730043,Retained for review.
+EAST.CA,2003-03-31,large_move_unexplained,close_returns,,,0.3139295701610117,Retained for review.
+EAST.CA,2008-10-27,large_move_unexplained,close_returns,,,-0.23482271118446696,Retained for review.
+EAST.CA,2008-12-14,large_move_unexplained,close_returns,,,-0.21650741935444584,Retained for review.
+EAST.CA,2009-06-18,large_move_unexplained,close_returns,,,-0.6716410567233094,Retained for review.
+ABUK.CA,,actions_source,yahoo_actions,,,,Yahoo action records supplied. Dividends leave price-return OHLC unchanged.
+ABUK.CA,2009-02-17,split_date_realigned,yahoo_actions,2009-02-12,1.1,-0.060495935195562955,Back-adjusted prior OHLC and applied the inverse factor to volume.
+ABUK.CA,2011-12-22,split_already_adjusted,yahoo_actions,,1.66667,,No matching break in raw Close; Yahoo Close already reflects this split.
+ABUK.CA,2017-08-07,split_already_adjusted,yahoo_actions,,1.5,,No matching break in raw Close; Yahoo Close already reflects this split.
+ABUK.CA,2017-11-09,split_already_adjusted,yahoo_actions,,10.0,,No matching break in raw Close; Yahoo Close already reflects this split.
+ABUK.CA,2002-10-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2003-10-21,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2004-10-19,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2006-10-10,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2007-10-02,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2008-09-17,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2009-09-02,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2010-09-08,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2011-04-12,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2011-10-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2012-10-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2013-10-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2014-12-09,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2015-10-12,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2016-10-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2017-10-24,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2018-10-23,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2019-10-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2020-10-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2021-10-19,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2022-05-10,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2022-10-18,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2023-10-24,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2024-10-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2025-10-22,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2026-04-20,dividend_price_return,yahoo_actions,,,,Cash dividend retained in price returns.
+ABUK.CA,2003-04-03,bad_print_reversal,close_returns,2003-04-07,,-0.21784308593535034,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-04-10,bad_print_reversal,close_returns,2003-04-14,,-0.2282963232867422,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-04-17,bad_print_reversal,close_returns,2003-04-21,,-0.24532098438504157,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-04-24,bad_print_reversal,close_returns,2003-04-29,,-0.26812155914114816,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-04-30,bad_print_reversal,close_returns,2003-05-05,,-0.28036293310064636,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-05-08,bad_print_reversal,close_returns,2003-05-14,,-0.266493140103781,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-05-12,bad_print_reversal,close_returns,2003-05-14,,0.0,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-05-15,bad_print_reversal,close_returns,2003-05-19,,-0.268818565939593,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-05-28,bad_print_reversal,close_returns,2003-05-29,,0.301712959774983,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-06-19,bad_print_reversal,close_returns,2003-06-23,,-0.2906407550241523,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-06-30,bad_print_reversal,close_returns,2003-07-07,,-0.35573288841192646,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-07-03,bad_print_reversal,close_returns,2003-07-07,,0.0,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-07-30,bad_print_reversal,close_returns,2003-07-31,,0.3245955252228608,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-11-06,bad_print_reversal,close_returns,2003-11-10,,-0.32919709748351406,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-11-24,bad_print_reversal,close_returns,2003-12-01,,-0.34006921778962196,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-12-11,bad_print_reversal,close_returns,2003-12-15,,-0.31665717327450377,Price set to NaN. Recovery session retained.
+ABUK.CA,2008-01-21,bad_print_reversal,close_returns,2008-01-23,,-0.16684640239953663,Price set to NaN. Recovery session retained.
+ABUK.CA,2008-01-22,bad_print_reversal,close_returns,2008-01-23,,0.027110346081258285,Price set to NaN. Recovery session retained.
+ABUK.CA,2003-05-21,large_move_unexplained,close_returns,,,-0.27414534749662717,Retained for review.
+ABUK.CA,2003-06-02,large_move_unexplained,close_returns,,,0.33573442975741025,Retained for review.
+ABUK.CA,2003-06-05,large_move_unexplained,close_returns,,,-0.2926838377079193,Retained for review.
+ABUK.CA,2003-06-16,large_move_unexplained,close_returns,,,0.2904132396033022,Retained for review.
+ABUK.CA,2003-07-17,large_move_unexplained,close_returns,,,-0.3491108631127784,Retained for review.
+ABUK.CA,2003-08-04,large_move_unexplained,close_returns,,,0.3463210129796801,Retained for review.
+ABUK.CA,2003-11-13,large_move_unexplained,close_returns,,,-0.3104389377974808,Retained for review.
+ABUK.CA,2003-11-17,large_move_unexplained,close_returns,,,0.4204446209510042,Retained for review.
+ABUK.CA,2004-12-21,large_move_unexplained,close_returns,,,0.21721618422339184,Retained for review.
+ABUK.CA,2008-03-03,large_move_unexplained,close_returns,,,0.2953559404926016,Retained for review.
+ABUK.CA,2024-02-25,large_move_unexplained,close_returns,,,-0.22130092660175915,Retained for review.

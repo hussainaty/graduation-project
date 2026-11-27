@@ -1,11 +1,12 @@
 """Download daily EGX price history from Yahoo Finance and report data quality.
-Usage:  python collect_egx.py            (reads tickers.txt, writes prices/*.csv + quality_report.csv)
+Usage:  python collect_egx.py            (reads tickers.txt, writes prices/*.csv, actions/*.csv and quality_report.csv)
 Re-run any time: it re-downloads full history, so it doubles as the daily updater."""
-import sys, pathlib, datetime as dt
+import pathlib, datetime as dt
 import pandas as pd, yfinance as yf
 
 here = pathlib.Path(__file__).parent
 out = here / "prices"; out.mkdir(exist_ok=True)
+actions_dir = here / "actions"; actions_dir.mkdir(exist_ok=True)
 tickers = [l.strip() for l in (here / "tickers.txt").read_text().splitlines() if l.strip() and not l.startswith("#")]
 rows = []
 for t in tickers:
@@ -15,6 +16,24 @@ for t in tickers:
     d.index.name = "date"
     d["downloaded_at_utc"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     d.to_csv(out / f"{t.replace('.', '_')}.csv")
+    action_path = actions_dir / f"{t.replace('.', '_')}.csv"
+    try:
+        events = yf.Ticker(t).actions
+        if not isinstance(events, pd.DataFrame):
+            print(t, "corporate actions did not return a table; preserving the cache")
+        elif events.empty and action_path.is_file():
+            print(t, "empty corporate actions response; keeping the existing actions cache")
+        else:
+            columns = ["Dividends", "Stock Splits"]
+            if events.empty:
+                events = pd.DataFrame(columns=columns)
+            else:
+                events = events.reindex(columns=columns).copy()
+                events.index = pd.to_datetime(events.index).tz_localize(None).normalize()
+            events.index.name = "date"
+            events.to_csv(action_path)
+    except Exception as error:
+        print(t, "could not refresh corporate actions:", error)
     gaps = d.index.to_series().diff().dt.days
     rows.append({"ticker": t, "rows": len(d), "first": d.index.min().date(), "last": d.index.max().date(),
                  "zero_volume_days": int((d["Volume"] == 0).sum()),
